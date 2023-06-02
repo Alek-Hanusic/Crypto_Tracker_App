@@ -1,12 +1,14 @@
 import streamlit as st
 import sqlite3
+from mainapp import main
+
 
 conn = sqlite3.connect('data.db')
 cursor = conn.cursor()
 
 cursor.execute(
     'CREATE TABLE IF NOT EXISTS users (name TEXT, username VARCHAR(255) NOT NULL, '
-    'password varchar(255) NOT NULL, email TEXT NOT NULL, PRIMARY KEY (username))')
+    'password varchar(255) NOT NULL, PRIMARY KEY (username))')
 
 
 def app():
@@ -67,15 +69,15 @@ def signup():
     else:
         st.success('Username is available')
         username_valid = True
-
-    # EMAIL CHECK
-    email = st.text_input('Email', key='email')
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        st.warning('Email address is invalid')
-        email_valid = False
-    else:
-        st.success('Email address is valid')
-        email_valid = True
+    #
+    # # EMAIL CHECK
+    # email = st.text_input('Email', key='email')
+    # if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+    #     st.warning('Email address is invalid')
+    #     email_valid = False
+    # else:
+    #     st.success('Email address is valid')
+    #     email_valid = True
 
     # PASSWORD CHECK
     password = st.text_input('Password', type='password', key='passw')
@@ -100,30 +102,41 @@ def signup():
 
     # FUNCTIONALITY
     if st.button('Sign Up'):
-        if name_valid and username_valid and email_valid and password_valid and confirm_password_valid:
+        if name_valid and username_valid and password_valid and confirm_password_valid:
             cursor.execute('SELECT username FROM users WHERE username=?', (username.lower(),))
-            st.success('Welcome {}'.format(username))
-            cursor.execute('INSERT INTO users (name, username, password, email) VALUES (?, ?, ?, ?)',
-                           (name, username.lower(), password, email))
+
+            cursor.execute('SELECT username FROM users WHERE username = ?', (username.lower(),))
+            existing_username = cursor.fetchone()
+
+            if existing_username is None:
+                cursor.execute('INSERT INTO users (name, username, password) VALUES (?, ?, ?)',
+                               (name, username.lower(), password))
+                st.success('Welcome {}'.format(username))
+            else:
+                st.warning('Username already exists')
+
             conn.commit()
             conn.close()
-            clear_inputs()
+            return True
+            # clear_inputs()
         else:
             st.warning('Fix the above errors to sign up')
+            return False
 
-def clear_inputs():
-    st.session_state.name = ""
-    st.session_state.user = ""
-    st.session_state.email = ""
-    st.session_state.passw = ""
-    st.session_state.con_pass = ""
-def main():
-    pass
+
+# def clear_inputs():
+#     st.session_state.name = ""
+#     st.session_state.user = ""
+#     st.session_state.email = ""
+#     st.session_state.passw = ""
+#     st.session_state.con_pass = ""
+
 
 def register():
     pass
 
 
-
 if __name__ == '__main__':
     app()
+    # if login():
+    #     main()
