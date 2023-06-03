@@ -1,4 +1,3 @@
-import os
 import atexit
 import subprocess as sp
 import os
@@ -15,7 +14,7 @@ def kill_server(p):
         pass
 
 if __name__ == '__main__':
-    cmd = f'streamlit run app.py --server.headless=True'
+    cmd = f'streamlit run mainapp.py --server.headless=True'
 
     p = sp.Popen(cmd.split(), stdout=sp.DEVNULL)
     atexit.register(kill_server, p)
