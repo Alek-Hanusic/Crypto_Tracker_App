@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 coin_gecko_api = "https://api.coingecko.com/api/v3/coins/markets"
-binance_api = "https://data.binance.com/api/v3/ticker/price"
+binance_api = "https://data.binance.com/api/v3/ticker/24hr/"
 coinranking_api = "https://api.coinranking.com/v2/coins"
 
 
