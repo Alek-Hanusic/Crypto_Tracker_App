@@ -149,6 +149,7 @@ def add_liked_coin(username, coin_symbol):
     liked_coins.append(coin_symbol)
 
     # Convert the list to a string
+    liked_coins = [coin for coin in liked_coins if coin is not None]
     liked_coins_str = ','.join(liked_coins)
 
     # Update the liked_coins column for the user

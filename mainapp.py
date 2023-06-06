@@ -84,7 +84,7 @@ def dashboard():
     # API selection
     st.sidebar.markdown("---")
     st.sidebar.title('API Selection')
-    selected_api = st.sidebar.selectbox('Choose an API', ['CoinRanking','CoinGecko', 'Binance'])
+    selected_api = st.sidebar.selectbox('Choose an API', ['CoinRanking','CoinGecko'])
     st.session_state.selected_api = selected_api
 
     # Sort options
@@ -111,12 +111,12 @@ def dashboard():
     if st.session_state.selected_api == 'CoinGecko':
         st.success('Data fetched from CoinGecko')
         df = pd.DataFrame(data, columns=['name', 'symbol', 'current_price', 'price_change_percentage_24h'])
-        df.columns = ['Name', 'Symbol', 'Current Price', 'Price Change (24h)']
-    elif st.session_state.selected_api == 'Binance':
-        st.success('Data fetched from Binance')
-
-        df = pd.DataFrame(data, columns=['symbol', 'lastPrice', 'priceChangePercent'])
-        df.columns = ['Symbol', 'Current Price ($)', 'Price Change Last 24h (%)']
+        df.columns = ['Name', 'Symbol', 'Current Price ($)', 'Price Change Last 24h ($)']
+    # elif st.session_state.selected_api == 'Binance':
+    #     st.success('Data fetched from Binance')
+    #
+    #     df = pd.DataFrame(data, columns=['symbol', 'lastPrice', 'priceChangePercent'])
+    #     df.columns = ['Symbol', 'Current Price ($)', 'Price Change Last 24h (%)']
     else:
         st.success('Data fetched from CoinRanking')
         df = pd.DataFrame(data, columns=['symbol','name', 'price', 'change'])
@@ -150,7 +150,7 @@ def liked_page():
     liked_symbol = st.text_input("Enter the symbol of the coin you want to like")
     st.markdown("---")
     if st.button("Like"):
-        if liked_symbol:
+        if liked_symbol.isalpha():
             add_liked_coin(username, liked_symbol)
             st.success(f"You liked {liked_symbol}!")
         else:

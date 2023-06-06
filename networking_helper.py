@@ -21,13 +21,13 @@ def get_response(api):
         response = requests.get(coin_gecko_api, params=params)
         data = response.json()
         return data
-    if api == 'Binance':
+    # if api == 'Binance':
+    #
+    #     response = requests.get(binance_api)
+    #     data = response.json()
+    #     return data
 
-        response = requests.get(binance_api)
-        data = response.json()
-        return data
-
-    elif api == 'CoinRanking':
+    if api == 'CoinRanking':
         response = requests.get(coinranking_api)
         data = json.loads(response.text)
         data = data["data"]["coins"]
@@ -39,6 +39,8 @@ def get_response(api):
         #     price_change = float(coin["change"])
         #     data.append({"Name": name, "Symbol": symbol, "Price": price, "Price Change": price_change})
         return data
+    else:
+        return "Error"
 
 
 
